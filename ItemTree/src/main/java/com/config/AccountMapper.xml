@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AccountMapper">
+	<insert id="accountAdd" parameterType="MemberDTO">
+	insert into account
+	(userid, mileage, sum_sell, sum_buy, coupon1, coupon2)
+	values
+	(#{userid}, '0', '0', '0', '0', '0');
+	</insert>
+
+	<select id="myAccount" parameterType="String" resultType="AccountDTO">
+	select userid, mileage, sum_sell, sum_buy, coupon1, coupon2
+	from account
+	where userid = #{userid}
+	</select>
+	
+	<update id="chargeMileage" parameterType="HashMap">
+	update account
+	set mileage = 
+	(
+		(select mileage from(select mileage from account where userid = #{userid} ) sub) 
+	    + #{mileage}
+	)
+	where userid = #{userid};
+	</update>
+	
+	<select id="myMileage" parameterType="String" resultType="int">
+	select mileage 
+	from account 
+	where userid = #{buyer} 
+	</select>
+	
+	<update id="trading_Mileage" parameterType="HashMap">
+	update account
+	set mileage = 
+	(
+		(select mileage from(select mileage from account where userid = #{userid} ) sub)
+		- #{price}
+	)
+	where userid = #{userid}
+	</update>
+</mapper>

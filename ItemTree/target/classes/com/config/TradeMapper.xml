@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TradeMapper">
+	
+	<insert id="tradeAdd" parameterType="TradeDTO">
+	insert into trade
+	(buyer_id, buyer_charname, no, buyer_approval, seller_approval)
+	values
+	(#{buyer_id}, #{buyer_charname}, #{no}, #{buyer_approval}, #{seller_approval})
+	</insert>
+	
+	<select id="getNo" parameterType="String" resultType="TradeDTO">
+	select *
+	from trade
+	where buyer_id = #{userid} or seller_id = #{userid}
+	</select>
+	
+	<update id="seller_apporval" parameterType="HashMap">
+	update trade
+	set seller_approval = #{approval}
+	where no = #{no}
+	</update>
+	
+	<update id="trade_approval" parameterType="HashMap">
+	update trade
+	set buyer_approval = #{approval}
+	where no = #{no}
+	</update>
+	
+	<select id="select_no_buyer" parameterType="String" resultType="int">
+	select no
+	from trade
+	where buyer_id = #{userid}
+	</select>
+</mapper>

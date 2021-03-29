@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PostMapper">
+
+	<insert id="postAdd" parameterType="PostDTO">
+	insert into post 
+	(userid, type, gamename, servername, category, amount,
+	 price, title, content, charactername, regdate)
+	values
+	( #{userid}, #{type}, #{gamename}, #{servername},
+	 #{category}, #{amount},
+	 #{price}, #{title}, #{content}, #{charactername}, sysdate())
+	</insert>
+
+	<select id="postListAll" resultType="PostDTO">
+	select * from post
+	where type in ('판매', '구매') 
+	order by regdate desc;
+	</select>
+	
+	<select id="postOverview" parameterType="int" resultType="PostDTO">
+	select * from post
+	where no = #{no}
+	</select>
+	
+	<update id="postUpdate" parameterType="PostDTO">
+	update post
+	set gamename = #{gamename},
+	servername = #{servername},
+	category = #{category},
+	amount = #{amount},
+	price = #{price},
+	title = #{title},
+	content = #{content},
+	charactername = #{charactername},
+	regdate = sysdate()
+	where no = #{no}
+	</update>
+	
+	<delete id="postDelete" parameterType="int">
+	delete from post
+	where no = #{no}
+	</delete>
+	
+	<select id="select_userid" parameterType="int" resultType="String">
+	select userid
+	from post
+	where no = #{no}	
+	</select>
+	
+	<update id="post_trade_type" parameterType="HashMap">
+	update post
+	set type = #{type}
+	where no = #{no}
+	</update>
+	
+	<select id="select_traded" parameterType="String" resultType="PostDTO">
+	select * from post
+	where userid = #{userid}
+	and type = '거래완료'
+	</select>
+	
+	<select id="select_traded_buyer" parameterType="List" resultType="PostDTO">
+	select * from post
+	where type = '거래완료' and
+	no IN
+		<foreach collection="list" item="num" open="(" close=")" separator=",">
+			#{num.value}
+		</foreach>
+	</select>
+</mapper>

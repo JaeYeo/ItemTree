@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<mvc:default-servlet-handler/>
+	
+	<!-- main.jsp -->
+	<mvc:view-controller path="/memberForm" view-name="memberForm"/>
+	<mvc:view-controller path="/loginForm" view-name="loginForm"/>
+	<mvc:view-controller path="/postForm" view-name="postForm"/>
+	<mvc:view-controller path="/postOverview" view-name="postOverview"/>
+	<mvc:view-controller path="/postUpdate" view-name="postUpdate"/>
+	<mvc:view-controller path="/memberUpdate" view-name="memberUpdate"/>
+	<mvc:view-controller path="/memberPWUpdate" view-name="memberPWUpdate"/>
+	<mvc:view-controller path="/memberDelete" view-name="memberDelete"/>
+	<mvc:view-controller path="/myAccount" view-name="myAccount"/>
+	<mvc:view-controller path="/mCharging" view-name="mCharging"/>
+	<mvc:view-controller path="/tradeForm" view-name="tradeForm"/>
+	<mvc:view-controller path="/tradedList" view-name="tradedList"/>
+	<mvc:view-controller path="/tradedOverview" view-name="tradedOverview"/>
+	<mvc:view-controller path="/main" view-name="main"/>
+	<mvc:view-controller path="/" view-name="main"/>
+	
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>		
+	
+	<context:component-scan base-package="com.*"></context:component-scan>
+</beans>
