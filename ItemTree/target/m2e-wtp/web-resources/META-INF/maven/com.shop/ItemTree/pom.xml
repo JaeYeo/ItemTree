@@ -165,6 +165,11 @@
 			<artifactId>jackson-core</artifactId>
 			<version>2.8.8</version>
 		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
 		<!-- JSON/Ajax end -->
 		<!-- lombok. 생성자,toString, setter, getter를 생성없이 사용할수 있음. -->
 		<dependency>
@@ -172,25 +177,28 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.16</version> <!--버전은 그때 맞춰서 20201018기준 -->
 		</dependency>
-	<!-- JSON/Ajax start -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.8.8</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>2.8.8</version>
-		</dependency>
-		<!-- JSON/Ajax end -->
+	
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
 		    <groupId>org.json</groupId>
 		    <artifactId>json</artifactId>
 		    <version>20190722</version>
 		</dependency>
+				<!-- 첨부파일 START-->
+		<!-- MultipartHttpServletRequset -->
+		 <dependency>
+			 <groupId>commons-io</groupId>
+			 <artifactId>commons-io</artifactId>
+			 <version>2.0.1</version>
+		 </dependency>
+		 
+		 <dependency>
+			 <groupId>commons-fileupload</groupId>
+			 <artifactId>commons-fileupload</artifactId>
+			 <version>1.2.2</version>
+		 </dependency>	
+		<!-- 첨부파일 END -->
+		
 	</dependencies>
 	<build>
 		<plugins>

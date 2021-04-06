@@ -162,30 +162,7 @@ public class PayController {
 		return n;
 	}
 	
-//	public String makeReservation(HttpSession session) {
-//		//결제가 완료되면 결제상태가 true
-//		String payState = "TRUE";
-//		
-//		ReservationDTO reservationDTO = (ReservationDTO) session.getAttribute("reservationDTO");
-//		//결제 시점에 시간을 이용하여 ID가 생성되고 가져온다
-//		String reservation_Date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
-//		String reservation_ID = reservationService.getReservation_Id(reservation_Date);
-//		
-//		reservationDTO.setReservation_ID(reservation_ID);
-//		reservationDTO.setReservation_Date(reservation_Date);
-//		reservationDTO.setPayState(payState);
-//		
-//		int n = reservationService.updateReservation(reservationDTO);
-//		
-//		String nextPage = "main";
-//		if(n==1) {
-//			session.setAttribute("reservationDTO", reservationDTO);
-//			System.out.println(reservationDTO);
-//			nextPage = "reservationComplete";
-//		} 
-//		
-//		return nextPage;
-//	}
+
 	
 	
 }

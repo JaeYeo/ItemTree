@@ -6,6 +6,8 @@
 <head>
 	<title>Main</title>
 	<meta charset="UTF-8">
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	
 </head>
 <body>
 
@@ -16,6 +18,6 @@
 <jsp:include page="common/menu.jsp" flush="true"></jsp:include>
 <hr>
 <jsp:include page="post/postOverview.jsp" flush="true"></jsp:include>
-
+<jsp:include page="post/comment.jsp" flush="true"></jsp:include>
 </body>
 </html>

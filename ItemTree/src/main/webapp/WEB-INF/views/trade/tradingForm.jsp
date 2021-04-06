@@ -41,6 +41,18 @@
 				}
 			});//end ajax
 		});
+		$("#buyer_cancel").on("click", function() {
+			var no = ${pdto.no};
+			alert("거래취소요청 완료. 상대방이 수락하면 거래가 취소됩니다.");
+			$(".trade_cancel_mesg").text("거래취소 요청됨");
+			location.href="trade_cancel?buyer_cancel=true&no="+no;
+		});
+		$("#seller_cancel").on("click", function() {
+			var no = ${pdto.no};
+			alert("거래취소요청 완료. 상대방이 수락하면 거래가 취소됩니다.");
+			$(".trade_cancel_mesg").text("거래취소 요청됨");
+			location.href="trade_cancel?seller_cancel=true&no="+no;
+		});
 	});
 
 </script>
@@ -102,7 +114,9 @@
 </table>
 <br>
 <div id="buyer_appoval_mesg"></div>
+<div class="trade_cancel_mesg"></div>
 <button id="buyer_appoval">구매확정</button>
+<button id="buyer_cancel">거래취소 요청</button>
 <button id="message">ItemTree쪽지함</button>
 </div>
 </c:if>
@@ -140,7 +154,9 @@
 </table>
 <br>
 <div id="seller_appoval_mesg"></div>
+<div class="trade_cancel_mesg"></div>
 <button id="seller_appoval">물품 전달 완료</button>
+<button id="seller_cancel">거래취소 요청</button>
 <button id="message">ItemTree쪽지함</button>
 </div>
 </c:if>

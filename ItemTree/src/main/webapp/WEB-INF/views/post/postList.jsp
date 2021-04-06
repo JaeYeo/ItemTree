@@ -9,10 +9,14 @@
 <title>Insert title here</title>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
+	function fn_paging(curPage) {
+		location.href = "postList?curPage=" + curPage;
+		}
 	$(document).ready(function() {
-		$("#title").on("click", function() {
-			var no = $("#post_No").val();
-			location.href="postOverview?no="+no;
+		$(".type").each(function(index, item) {
+			$(".overview").each(function(i, ite) {
+				
+			})
 		})
 	})
 </script>
@@ -42,15 +46,44 @@
 		<tr>
 			<td class="type" style="text-align: center;">${list.type }</td>
 			<td>${list.gamename } / ${list.servername }</td>
-			<td><a href="postOverview?no=${list.no}">${list.title }</a></td>
+			<td><c:if test="${list.type != '거래완료' }"><a href="postOverview?no=${list.no}">${list.title }</a></c:if>
+				<c:if test="${list.type == '거래완료' }">${list.title }</c:if>
+			</td>
 			<td>${list.amount }</td>
 			<td>${list.price }</td>
 			<td>${list.regdate }</td>
 		</tr>
 		
 	</tbody>
-	</c:forEach>
-	
+	</c:forEach>	
 	</table>
+	<div>
+                    <c:if test="${pagedto.curRange ne 1 }">
+                        <a href="#" onClick="fn_paging(1)">[처음]</a> 
+                    </c:if>
+                    <c:if test="${pagedto.curPage ne 1}">
+                        <a href="#" onClick="fn_paging('${pagedto.prevPage }')">[이전]</a> 
+                    </c:if>
+                    <c:forEach var="pageNum" begin="${pagedto.startPage }" end="${pagedto.endPage }">
+                        <c:choose>
+                            <c:when test="${pageNum eq  pagedto.curPage}">
+                                <span style="font-weight: bold;"><a href="#" onClick="fn_paging('${pageNum }')">${pageNum }</a></span> 
+                            </c:when>
+                            <c:otherwise>
+                                <a href="#" onClick="fn_paging('${pageNum }')">${pageNum }</a> 
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                    <c:if test="${pagedto.curPage ne pagedto.pageCnt && pagedto.pageCnt > 0}">
+                        <a href="#" onClick="fn_paging('${pagedto.nextPage }')">[다음]</a> 
+                    </c:if>
+                    <c:if test="${pagedto.curRange ne pagedto.rangeCnt && pagedto.rangeCnt > 0}">
+                        <a href="#" onClick="fn_paging('${pagedto.pageCnt }')">[끝]</a> 
+                    </c:if>
+                </div>
+                
+                <div>
+                    총 게시글 수 : ${pagedto.listCnt } /    총 페이지 수 : ${pagedto.pageCnt } / 현재 페이지 : ${pagedto.curPage } / 현재 블럭 : ${pagedto.curRange } / 총 블럭 수 : ${pagedto.rangeCnt }
+                </div>
 </body>
 </html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CommentMapper">
+
+	<insert id="comment_add" parameterType="CommentDTO">
+	insert into comment 
+	( no, userid, content, regdate)
+	values
+	( #{no}, #{userid}, #{content}, sysdate())
+	</insert>
+	
+	<select id="comment_list" parameterType="int" resultType="CommentDTO">
+	select * from comment
+	where no = #{no}
+	</select>
+	
+	<delete id="comment_del" parameterType="int">
+	delete from comment
+	where commentno = #{no}
+	</delete>
+
+</mapper>

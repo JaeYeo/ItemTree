@@ -16,13 +16,13 @@
 			console.log(BCname);
 			if(BCname==""){
 				alert("구매자 캐릭터명을 입력해주세요.");
-				$("buyer_charactername").focus();
+				$("#BCname").focus();
 				return false;
 			}else if(price > mileage){
 				alert("보유 마일리지가 적습니다. 마일리지 충전 후 다시 시도해주세요.");
 				return false;
 			}
-			location.href = "trading?no="+no;
+			location.href = "trading?no="+no+"&BCname="+BCname;
 		});
 	})
 </script>
@@ -62,7 +62,7 @@
 	</tr>
 	<tr>
 		<th>구매자 캐릭터명</th>
-		<td><input type="text" name="buyer_charactername" id="BCname" placeholder="캐릭터명을 입력해주세요."></td>
+		<td><input type="text" name="BCname" id="BCname" placeholder="캐릭터명을 입력해주세요."></td>
 	</tr>
 </table>
 <h3>보유 마일리지 : ${myMileage }원&nbsp;&nbsp;&nbsp;&nbsp;결제 후 마일리지 : ${myMileage-dto.price }원</h3>

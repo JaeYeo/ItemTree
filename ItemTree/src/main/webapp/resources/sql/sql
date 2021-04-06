@@ -1,0 +1,90 @@
+create table user (
+	userid varchar(20) primary key,
+    passwd varchar(20) not null,
+    username varchar(10) not null,
+    post varchar(6) not null,
+    addr1 varchar(500) not null,
+    addr2 varchar(500) not null,
+    phone1 varchar(3) not null,
+    phone2 varchar(4) not null,
+    phone3 varchar(4) not null,
+    email1 varchar(20) not null,
+    email2 varchar(20) not null
+    );
+    
+    create table post(
+	userid varchar(20) not null,
+    no int primary key auto_increment,
+    type varchar(5) not null,
+    gamename varchar(20) not null,
+    servername varchar(20) not null,
+    category varchar(10) not null,
+    amount int not null,
+    price int not null,
+    title varchar(30) not null,
+    content varchar(300) not null,
+    charactername varchar(20) not null,
+    regdate datetime not null,
+    foreign key (userid)
+    references user(userid) on update cascade    
+    )
+
+    create table account(
+	userid varchar(20) ,
+    mileage int not null,
+    sum_sell int not null,
+    sum_buy int not null,
+    coupon1 boolean not null,
+    coupon2 boolean not null,
+    foreign key (userid)
+    references user(userid) on update cascade    
+    )
+    
+alter table post drop foreign key post_ibfk_1;
+ alter table post
+  add constraint foreign key(userid)
+  references user(userid) on delete cascade on update cascade;
+
+    create table trade(
+    buyer_id varchar(20) not null,
+    seller_id varchar(20) not null,
+    buyer_charname varchar(20) not null,
+    no int not null,
+    buyer_appoval boolean not null default 0,
+    seller_approval boolean not null default 0,
+    foreign key (no)
+    references post(no) on update cascade on delete cascade  
+    )
+
+alter table trade
+add column seller_code int not null,
+add column buyer_code int not null;
+
+alter table trade
+rename column buyer_appoval to buyer_approval;
+
+create table comment(
+	commentno int primary key auto_increment,
+    no int not null,
+    userid varchar(20) not null,
+    content varchar(100) not null,
+    regdate datetime not null,
+    foreign key(no)
+    references post(no) on update cascade on delete cascade);
+
+create table post_file
+(
+	file_no int not null auto_increment primary key,
+    no int not null,
+    org_file_name varchar(260) not null,
+    stored_file_name varchar(36) not null,
+    file_size int,
+    regdate datetime not null,
+    foreign key(no)
+    references post(no) on update cascade on delete cascade
+    )
+
+alter table trade
+add column seller_cancel boolean not null,
+add column buyer_cancel boolean not null;
+    

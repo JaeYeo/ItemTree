@@ -23,6 +23,10 @@ public class AccountDAO {
 		int n = template.update("AccountMapper.chargeMileage", map);
 		return n;
 	}
+	public int tradedMileage(HashMap<String, Object> map) {
+		int n = template.update("AccountMapper.tradedMileage", map);
+		return n;
+	}
 	
 	public int myMileage(String buyer) {
 		System.out.println("myMileage dao=="+buyer);
@@ -36,5 +40,13 @@ public class AccountDAO {
 		map.put("price", price);
 		int trading_Mileage = template.update("AccountMapper.trading_Mileage", map);
 		return trading_Mileage;
+	}
+	
+	public int total_buy_update(int no, int price) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("no", no);
+		map.put("price", price);
+		int total_buy_update = template.update("AccountMapper.total_buy_update", map);
+		return total_buy_update;
 	}
 }

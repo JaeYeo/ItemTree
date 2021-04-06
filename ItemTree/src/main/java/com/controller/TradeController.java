@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dto.AccountDTO;
+import com.dto.BuyingDTO;
 import com.dto.MemberDTO;
 import com.dto.PostDTO;
+import com.dto.SellingDTO;
 import com.dto.TradeDTO;
+import com.mysql.cj.log.Log;
 import com.service.AccountService;
 import com.service.MemberService;
 import com.service.PostService;
@@ -62,7 +65,7 @@ public class TradeController {
 		String seller_id = pservice.select_userid(no); 
 		MemberDTO seller_dto = mservice.selectM(seller_id);
 		PostDTO pdto = pservice.postOverview(no);
-		TradeDTO tdto = new TradeDTO(buyer_id, seller_id, bcname, no, false, false, (int)(Math.random()*10000), (int)(Math.random()*10000));
+		TradeDTO tdto = new TradeDTO(buyer_id, seller_id, bcname, no, false, false, (int)(Math.random()*10000), (int)(Math.random()*10000), false, false);
 		//결제했으니 구매자 돈뺴기
 		int price = pdto.getPrice();
 		System.out.println("차감 전"+aservice.myMileage(buyer_id));
@@ -78,33 +81,47 @@ public class TradeController {
 			mav.addObject("buyer_dto", buyer_dto);
 			mav.addObject("seller_dto", seller_dto);
 			mav.addObject("pdto", pdto);
+			mav.addObject("tdto", tdto);
 		}
 		mav.setViewName(nextPage);
 		return mav;
 	}
-	
-	@RequestMapping("/myTrading")
-	public ModelAndView myTrading(HttpSession session) {
+	@RequestMapping("/trading2")
+	public ModelAndView trading(@RequestParam("no") int no, HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		MemberDTO dto = (MemberDTO)session.getAttribute("login");
 		String userid = dto.getUserid();
-		//로그인된 아이디로 거래중인 물품정보 가져오기
-		TradeDTO tdto = tservice.getNo(userid);
-		//거래중인 물품번호로 판매자 구매자 id 가져오기
-		String buyer_id = tdto.getBuyer_id();
-		String seller_id = tdto.getSeller_id();
-		//물품정보, 구매자정보, 판매자정보
-		PostDTO pdto = pservice.postOverview(tdto.getNo());
-		MemberDTO buyer_dto = mservice.selectM(buyer_id);
-		MemberDTO seller_dto = mservice.selectM(seller_id);		
-		if(pdto.getType() == "거래중") {
-			mav.addObject("pdto", pdto);
-			mav.addObject("buyer_dto", buyer_dto);
-			mav.addObject("seller_dto", seller_dto);
-			mav.addObject("tdto", tdto);
-		}		
+		//구매자정보 판매자정보 물품정보
+		PostDTO pdto = pservice.postOverview(no);
+		TradeDTO tdto = tservice.select_no(no);
+		MemberDTO buyer_dto = mservice.selectM(tdto.getBuyer_id());
+		MemberDTO seller_dto = mservice.selectM(tdto.getSeller_id());
+		mav.addObject("buyer_dto", buyer_dto);
+		mav.addObject("seller_dto", seller_dto);
+		mav.addObject("pdto", pdto);
+		mav.addObject("tdto", tdto);
 		mav.setViewName("tradingForm");
-		
+		return mav;
+	}
+	
+	@RequestMapping("/myTrading")
+	public ModelAndView myTrading(HttpSession session, @RequestParam("type") String type) {
+		ModelAndView mav = new ModelAndView();
+		MemberDTO dto = (MemberDTO)session.getAttribute("login");
+		String userid = dto.getUserid();
+		String nextPage = "main";
+		if(type.equals("selling")) {
+			//판매중이면 sellingDTO
+			List<SellingDTO> selling_list = tservice.selling_list(userid);
+			mav.addObject("List", selling_list);
+			nextPage = "sellingList";
+		}else if(type.equals("buying")) {
+			//구매중이면 buyingDTO
+			List<BuyingDTO> buying_list = tservice.buying_list(userid);
+			mav.addObject("List", buying_list);
+			nextPage = "buyingList";
+		}
+		mav.setViewName(nextPage);
 		return mav;
 	}
 	
@@ -116,7 +133,7 @@ public class TradeController {
 		System.out.println("판매자 승인=="+seller_approval);
 		System.out.println("물품번호-==="+no);
 		if(seller_approval == true) {
-			tservice.seller_apporval(seller_approval, no);
+			tservice.seller_approval(seller_approval, no);
 			mesg = "물품전달 완료";
 		}
 		return mesg;
@@ -131,6 +148,7 @@ public class TradeController {
 		int approval = 0;
 		PostDTO pdto = pservice.postOverview(no);
 		String seller = pdto.getUserid();
+		
 		int price = pdto.getPrice();
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("userid", seller); //판매자 아이디
@@ -139,12 +157,14 @@ public class TradeController {
 		if(buyer_approval == true) {
 			approval =tservice.trade_approval(buyer_approval, no);
 		}//구매자승인이 이루어지면 물품(Post DB)은 거래완료 업데이트, 판매자(Member DB)에게 마일리지 입금
+		//판매자 총 판매금액, 구매자 총 구매금액 업데이트
 		if(approval == 1) {
 			pservice.post_trade_type("거래완료", no);
-			aservice.chargeMileage(map);
+			aservice.tradedMileage(map); // 판매자 마일리지입금, 판매금액 업데이트
+			aservice.total_buy_update(no, price); //구매자 구매금액 업데이트
 			pdto = pservice.postOverview(no);
-			mav.addObject("pdto", pdto);
-			nextPage = "tradedForm";
+			mav.addObject("dto", pdto);
+			nextPage = "tradedOverview";
 		}
 		mav.setViewName(nextPage);
 		return mav;
@@ -189,5 +209,33 @@ public class TradeController {
 		mav.setViewName("tradedOverview");
 		
 		return mav;
+	}
+	
+	@RequestMapping("/trade_cancel")
+	public String trade_cancel(boolean buyer_cancel, boolean seller_cancel, int no) {
+		System.out.println("구매자취소=="+buyer_cancel);
+		System.out.println("판매자취소=="+seller_cancel);
+		System.out.println("물품번호=="+no);
+		//취소요청마다 승인 업데이트
+		if(buyer_cancel) {
+			tservice.buyer_cancel(buyer_cancel, no);
+		}else if(seller_cancel) {
+			tservice.seller_cancel(seller_cancel, no);
+		}
+		//물품번호로 거래취소 조회해서 둘다 승인하면 거래취소와 환불
+		TradeDTO tdto = tservice.select_no(no);		
+		if(tdto.isBuyer_cancel() && tdto.isSeller_cancel()) {			
+			//구매자아이디 금액 찾아서 마일리지 환불
+			String buyer_id = tdto.getBuyer_id();
+			PostDTO pdto = pservice.postOverview(no);
+			int price = pdto.getPrice();
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("userid", buyer_id);
+			map.put("mileage", price);
+			aservice.chargeMileage(map);
+			pservice.postDelete(no);
+		}
+		
+		return "redirect:main";
 	}
 }

@@ -26,6 +26,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where userid = #{userid};
 	</update>
 	
+	<update id="tradedMileage" parameterType="HashMap">
+	update account
+	set mileage = 
+	(
+		(select mileage from(select mileage from account where userid = #{userid} ) sub) 
+	    + #{mileage}
+	),
+	sum_sell = 
+	(
+		(select sum_sell from(select sum_sell from account where userid = #{userid} ) sub) 
+	    + #{mileage}
+	)
+	where userid = #{userid};
+	</update>
+	
 	<select id="myMileage" parameterType="String" resultType="int">
 	select mileage 
 	from account 
@@ -40,5 +55,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		- #{price}
 	)
 	where userid = #{userid}
+	</update>
+	
+	<update id="total_buy_update" parameterType="HashMap">
+	update account
+	set sum_buy = sum_buy + #{price}
+	where userid = (select buyer_id from trade where no=#{no});
 	</update>
 </mapper>

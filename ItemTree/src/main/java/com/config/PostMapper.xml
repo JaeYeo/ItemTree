@@ -14,10 +14,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 #{price}, #{title}, #{content}, #{charactername}, sysdate())
 	</insert>
 
+	<insert id="insertFile" parameterType="HashMap">
+		insert into post_file(
+			no,
+			org_file_name,
+			stored_file_name,
+			file_size,
+			regdate
+		)values(
+			(select max(no) from post),
+			#{ORG_FILE_NAME},
+			#{STORED_FILE_NAME},
+			#{FILE_SIZE=100943},
+			sysdate()
+		)		
+	</insert>
+	
+	<select id="postfilename" parameterType="int" resultType="String">
+	select stored_file_name
+	from post_file
+	where no = #{no}
+	</select>
+	
+	<select id="selectSize" resultType="int">
+		select count(no) from post
+	</select>
+	
 	<select id="postListAll" resultType="PostDTO">
-	select * from post
-	where type in ('판매', '구매') 
-	order by regdate desc;
+	SELECT @ROWNUM := @ROWNUM +1 AS ROWNUM,
+	P.*
+    FROM POST P,(SELECT @ROWNUM := 0 ) TMP
+    WHERE TYPE NOT IN ('거래중')
+    order by NO desc;
 	</select>
 	
 	<select id="postOverview" parameterType="int" resultType="PostDTO">
@@ -69,5 +97,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<foreach collection="list" item="num" open="(" close=")" separator=",">
 			#{num.value}
 		</foreach>
+	</select>
+	
+	<select id="search_name" parameterType="String" resultType="PostDTO">
+	select * from post
+	where gamename like CONCAT('%',#{name},'%')
+	or
+	servername like CONCAT('%',#{name},'%')
+	and
+	type NOT IN ('거래중')
+	</select>
+	
+	<select id="select_myTrading" parameterType="String" resultType="PostDTO">
+	select * from post
+	where userid = #{userid}
+	and
+	type = '거래중'
 	</select>
 </mapper>

@@ -11,7 +11,8 @@
 <body>	
 	<a href="myAccount">My Account </a><br><br>
 	
-	 <a href="myTrading">거래중인 물품</a><br>
+	 <a href="myTrading?type=selling">판매중인 물품</a><br>
+	 <a href="myTrading?type=buying">구매중인 물품</a><br>
 	 <a href="tradedList?user=seller">판매완료 물품</a><br>
 	 <a href="tradedList?user=buyer">구매완료 물품</a><br><br> 
 	 

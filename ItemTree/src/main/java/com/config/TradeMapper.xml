@@ -6,9 +6,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="tradeAdd" parameterType="TradeDTO">
 	insert into trade
-	(buyer_id, buyer_charname, no, buyer_approval, seller_approval)
+	(buyer_id, seller_id, buyer_charname, no, buyer_approval, seller_approval, 
+	seller_code, buyer_code, buyer_cancel, seller_cancel)
 	values
-	(#{buyer_id}, #{buyer_charname}, #{no}, #{buyer_approval}, #{seller_approval})
+	(#{buyer_id}, #{seller_id}, #{buyer_charname}, #{no}, #{buyer_approval}, #{seller_approval}, 
+	#{seller_code}, #{buyer_code}, #{buyer_cancel}, #{seller_cancel})
 	</insert>
 	
 	<select id="getNo" parameterType="String" resultType="TradeDTO">
@@ -17,9 +19,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where buyer_id = #{userid} or seller_id = #{userid}
 	</select>
 	
-	<update id="seller_apporval" parameterType="HashMap">
+	<update id="seller_cancel" parameterType="HashMap">
 	update trade
-	set seller_approval = #{approval}
+	set seller_cancel = #{cancel}
+	where no = #{no}
+	</update>
+	<update id="buyer_cancel" parameterType="HashMap">
+	update trade
+	set buyer_cancel = #{cancel}
 	where no = #{no}
 	</update>
 	
@@ -28,10 +35,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	set buyer_approval = #{approval}
 	where no = #{no}
 	</update>
+	<update id="seller_approval" parameterType="HashMap">
+	update trade
+	set seller_approval = #{approval}
+	where no = #{no}
+	</update>
 	
 	<select id="select_no_buyer" parameterType="String" resultType="int">
 	select no
 	from trade
 	where buyer_id = #{userid}
+	</select>
+	
+	<select id="selling_list" parameterType="String" resultType="SellingDTO">
+	select post.no, post.userid, type, category, title, amount, price, 
+			buyer_id, buyer_charname, buyer_code, seller_code 
+	from post
+	inner join trade
+	on post.no = trade.no
+	where trade.seller_id = #{userid}
+	and
+	type = '거래중'	
+	
+	</select>
+	
+	<select id="buying_list" parameterType="String" resultType="BuyingDTO">
+	select post.no, post.userid, type, category, title, amount, price, 
+			seller_id, charactername, buyer_code, seller_code 
+	from post
+	inner join trade
+	on post.no = trade.no
+	where trade.buyer_id = #{userid}
+	and
+	type = '거래중'
+	
+	</select>
+	
+	<select id="select_no" parameterType="int" resultType="TradeDTO">
+	select * from trade
+	where no = #{no}
 	</select>
 </mapper>

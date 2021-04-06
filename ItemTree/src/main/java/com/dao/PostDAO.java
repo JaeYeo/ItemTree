@@ -2,11 +2,14 @@ package com.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.dto.PageDTO;
 import com.dto.PostDTO;
 
 @Repository
@@ -22,15 +25,33 @@ public class PostDAO {
 		}
 		return postadd;
 	}
+	//첨부파일 업로드
+	public void insertFile(Map<String, Object> map) {
+		System.out.println("파일업로드 dao==="+map);
+		template.insert("PostMapper.insertFile", map);
+	}
 	
-	public List<PostDTO> postListAll(){
-		List<PostDTO> list = template.selectList("PostMapper.postListAll");
+	public int selectSize() {
+		int listsize = template.selectOne("PostMapper.selectSize");
+		return listsize;
+	}
+	
+	public List<PostDTO> postListAll(PageDTO pagedto){
+		RowBounds row = new RowBounds(pagedto.getStartIndex(), pagedto.getPageSize());	
+		System.out.println(pagedto.getStartIndex());
+		System.out.println(pagedto.getPageSize());
+		List<PostDTO> list = template.selectList("PostMapper.postListAll", null, row);		
 		return list;
 	}
 	
 	public PostDTO postOverview(int no) {
 		PostDTO dto = template.selectOne("PostMapper.postOverview", no);
 		return dto;
+	}
+	
+	public String postfilename(int no) {
+		String filename = template.selectOne("PostMapper.postfilename", no);
+		return filename;
 	}
 	
 	public int postUpdate(PostDTO dto) {
@@ -63,6 +84,16 @@ public class PostDAO {
 	
 	public List<PostDTO> select_traded(List<Integer> nums){
 		List<PostDTO> list = template.selectList("PostMapper.select_traded_buyer", nums);
+		return list;
+	}
+	
+	public List<PostDTO> search_name(String name){
+		List<PostDTO> list = template.selectList("PostMapper.search_name", name);
+		return list;
+	}
+	
+	public List<PostDTO> select_myTrading(String userid){
+		List<PostDTO> list = template.selectList("PostMapper.select_myTrading", userid);
 		return list;
 	}
 	

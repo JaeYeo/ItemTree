@@ -7,7 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<input type="text" placeholder="게임과 서버명을 검색해보세요.">
-	<input type="button" value="검색" >
+<form action="search_name">
+	<input type="text" name="search_name" placeholder="게임과 서버명을 검색해보세요.">
+	<input type="submit" value="검색" >
+</form>
 </body>
 </html>

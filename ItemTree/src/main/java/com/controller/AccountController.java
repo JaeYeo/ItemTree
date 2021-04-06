@@ -25,10 +25,9 @@ public class AccountController {
 		MemberDTO mdto = (MemberDTO)session.getAttribute("login");
 		String userid = mdto.getUserid();
 		AccountDTO adto = service.myAccount(userid);
-		System.out.println(adto);
-		
+		System.out.println(adto);	
+		mav.setViewName("/myAccount");
 		mav.addObject("myAccount", adto);
-		mav.setViewName("myAccount");
 		return mav;
 	}
 	

@@ -41,7 +41,7 @@
 
 
 </script>
-<h1>비밀번호 변경</h1>
+<h1>회원탈퇴</h1>
 <form action="memberDelete2" method="post">
 
 아이디 : <span name="userid">${login.userid }</span><br>

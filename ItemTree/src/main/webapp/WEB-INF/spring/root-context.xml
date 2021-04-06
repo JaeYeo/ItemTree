@@ -29,6 +29,7 @@
 				<value>classpath:com/config/PostMapper.xml</value>
 				<value>classpath:com/config/AccountMapper.xml</value>
 				<value>classpath:com/config/TradeMapper.xml</value>
+				<value>classpath:com/config/CommentMapper.xml</value>
 			</list>
 		</property>
 		<property name="typeAliases">
@@ -37,6 +38,9 @@
 				<value>com.dto.PostDTO</value>
 				<value>com.dto.AccountDTO</value>
 				<value>com.dto.TradeDTO</value>
+				<value>com.dto.SellingDTO</value>
+				<value>com.dto.BuyingDTO</value>
+				<value>com.dto.CommentDTO</value>
 			</list>
 		</property>
 	</bean>
@@ -44,5 +48,5 @@
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory" ref="sessionFactory"></constructor-arg>
 	</bean>
-	
+	<context:component-scan base-package="com.util"></context:component-scan>
 </beans>

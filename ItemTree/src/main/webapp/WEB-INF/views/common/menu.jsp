@@ -8,7 +8,7 @@
 </head>
 <body>
 	
-	<a href="postForm">물품등록</a>
+	<a href="loginCheck/postForm">물품등록</a>
 	<a href="">이벤트/쿠폰</a>
 	<a href="">Tree-Game</a>
 </body>

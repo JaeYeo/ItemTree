@@ -10,6 +10,10 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     <typeAlias type="com.dto.MemberDTO" alias="MemberDTO"/><!--DTO alias -->
     <typeAlias type="com.dto.PostDTO" alias="PostDTO"/><!--DTO alias -->
     <typeAlias type="com.dto.AccountDTO" alias="AccountDTO"/><!--DTO alias -->
+    <typeAlias type="com.dto.TradeDTO" alias="TradeDTO"/><!--DTO alias -->
+    <typeAlias type="com.dto.SellingDTO" alias="SellingDTO"/><!--DTO alias -->
+    <typeAlias type="com.dto.BuyingDTO" alias="BuyingDTO"/><!--DTO alias -->
+    <typeAlias type="com.dto.CommentDTO" alias="CommentDTO"/><!--DTO alias -->
 
     
    </typeAliases>
@@ -30,6 +34,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="com/config/PostMapper.xml" />
 		<mapper resource="com/config/AccountMapper.xml" />
 		<mapper resource="com/config/TradeMapper.xml" />
+		<mapper resource="com/config/CommentMapper.xml" />
 
 	</mappers>
 </configuration>
